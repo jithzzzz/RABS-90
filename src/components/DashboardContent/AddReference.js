@@ -41,7 +41,7 @@ const AddReferenceModal = (props) => {
     <div className="add-modal">
       <div className="d-block close">
         <i
-          className="fas fa-times-circle"
+          className="fa fa-times-circle"
           onClick={() => props.closeModal(false)}
         ></i>
       </div>

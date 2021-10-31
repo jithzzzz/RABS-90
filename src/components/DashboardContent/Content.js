@@ -51,7 +51,7 @@ const Content = (props) => {
               style={{ top: "-14px" }}
             >
               <i
-                className="fas fa-times-circle"
+                className="fa fa-times-circle"
                 style={{ cursor: "pointer" }}
                 onClick={() => setDatepicker(false)}
               ></i>

@@ -66,7 +66,7 @@ const App = (props) => {
       <div>
         <div className="d-block close mr-3 mt-2">
           <i
-            className="fas fa-times-circle"
+            className="fa fa-times-circle"
             style={{ cursor: "pointer" }}
             onClick={() => props.closeModal(false)}
           ></i>

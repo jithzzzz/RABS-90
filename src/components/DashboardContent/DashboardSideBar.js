@@ -43,14 +43,14 @@ const DashboardSideBar = (props) => {
     {
       id: 3,
       text: "Add Reference",
-      icon: "fas fa-address-book",
+      icon: "fa fa-address-book-o",
       link: "",
       setState: setaddReferenceModal,
     },
     {
       id: 4,
       text: "Medicine",
-      icon: "fas fa-address-card",
+      icon: "fa fa-medkit",
       link: "",
       dropDown: true,
       state: medicineDropdown,
@@ -74,7 +74,7 @@ const DashboardSideBar = (props) => {
     {
       id: 5,
       text: "Diagnostics",
-      icon: "fas fa-angry",
+      icon: "fa fa-stethoscope",
       link: "",
       dropDown: true,
       state: diognosticsDropdown,

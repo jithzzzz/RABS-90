@@ -109,7 +109,7 @@ const PrescriptionModal = (props) => {
     if (reference?.length !== 0) {
       let list = reference?.map((val) => {
         return {
-          id: val.RFId  ,
+          id: val.RFId,
           name: val.Name,
           label: `${val.Name}, ${val.Department && val.Department}`,
         };
@@ -230,7 +230,7 @@ const PrescriptionModal = (props) => {
       <div className="prnav pl-4 pr-4" style={{ fontSize: "14px" }}>
         <div className="d-block" style={{ fontSize: "25px", textAlign: "end" }}>
           <i
-            className="fas fa-times-circle"
+            className="fa fa-times-circle"
             style={{ cursor: "pointer" }}
             onClick={() => props.closeModal(false)}
           ></i>

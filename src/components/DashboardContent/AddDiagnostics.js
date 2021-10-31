@@ -72,7 +72,7 @@ const AddDiagnosticsModal = (props) => {
     <div className="add-modal">
       <div className="d-block close">
         <i
-          class="fas fa-times-circle"
+          class="fa fa-times-circle"
           onClick={() => props.closeModal(false)}
         ></i>
       </div>

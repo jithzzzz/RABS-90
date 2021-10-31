@@ -109,7 +109,7 @@ const AddNewPatient = (props) => {
       <div className="banner d-flex justify-content-between">
         <h4>ADD NEW PATIENT DETAILS</h4>
         <i
-          className="fas fa-times-circle"
+          className="fa fa-times-circle"
           style={{ cursor: "pointer" }}
           onClick={() => props.closeModal(false)}
         ></i>
@@ -175,7 +175,7 @@ const AddNewPatient = (props) => {
                         color: male ? "#fff" : "#72c4a7",
                       }}
                     >
-                      <i className="fas fa-male"></i>
+                      <i className="fa fa-male"></i>
                       <p className="m-0">Male</p>
                     </div>
                     <div
@@ -186,7 +186,7 @@ const AddNewPatient = (props) => {
                         color: female ? "#fff" : "#72c4a7",
                       }}
                     >
-                      <i className="fas fa-female"></i>
+                      <i className="fa fa-female"></i>
                       <p className="m-0">Female</p>
                     </div>
                   </div>
