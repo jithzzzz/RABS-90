@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.js": "/RABS-90/static/js/main.8b985908.chunk.js",
+    "main.js.map": "/RABS-90/static/js/main.8b985908.chunk.js.map",
+    "runtime-main.js": "/RABS-90/static/js/runtime-main.a41ee873.js",
+    "runtime-main.js.map": "/RABS-90/static/js/runtime-main.a41ee873.js.map",
+    "static/css/2.fb0f5cd4.chunk.css": "/RABS-90/static/css/2.fb0f5cd4.chunk.css",
+    "static/js/2.5157dd5d.chunk.js": "/RABS-90/static/js/2.5157dd5d.chunk.js",
+    "static/js/2.5157dd5d.chunk.js.map": "/RABS-90/static/js/2.5157dd5d.chunk.js.map",
+    "static/js/3.9965dd74.chunk.js": "/RABS-90/static/js/3.9965dd74.chunk.js",
+    "static/js/3.9965dd74.chunk.js.map": "/RABS-90/static/js/3.9965dd74.chunk.js.map",
+    "index.html": "/RABS-90/index.html",
+    "static/css/2.fb0f5cd4.chunk.css.map": "/RABS-90/static/css/2.fb0f5cd4.chunk.css.map",
+    "static/js/2.5157dd5d.chunk.js.LICENSE.txt": "/RABS-90/static/js/2.5157dd5d.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.a41ee873.js",
+    "static/css/2.fb0f5cd4.chunk.css",
+    "static/js/2.5157dd5d.chunk.js",
+    "static/js/main.8b985908.chunk.js"
+  ]
+}
