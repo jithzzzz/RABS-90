@@ -34,6 +34,7 @@ const Login = () => {
       logInAction(data, (res) => {
         if (res.status) {
           setSpinner(false);
+          localStorage.setItem("token", res.token?.access_token);
           history.push("/dashboard");
         } else {
           setLoginFailed(true);
@@ -49,20 +50,28 @@ const Login = () => {
   return (
     <div className="row d-flex m-0 position-relative">
       <div className="col-9 p-0">
-        <img src="/images/note.jpg"
-        alt=""
-        style={{height:"100%",width:"100%"}}/>
+        <img
+          src="/images/note.jpg"
+          alt=""
+          style={{ height: "100%", width: "100%" }}
+        />
       </div>
       <div className="col-3 p-0">
         <div className="login-div">
           <div className="log">
-            <div className="d-flex" style={{height:"160px",width:"100%",justifyContent:"center"}}>
-
-            <img
-              src="/images/steth.gif"
-              alt=""
-              style={{ height: "100%", width: "160px" }}
-            />
+            <div
+              className="d-flex"
+              style={{
+                height: "160px",
+                width: "100%",
+                justifyContent: "center",
+              }}
+            >
+              <img
+                src="/images/steth.gif"
+                alt=""
+                style={{ height: "100%", width: "160px" }}
+              />
             </div>
 
             <form

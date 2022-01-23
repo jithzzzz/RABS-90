@@ -48,8 +48,8 @@ export const logInAction = (payload, callback) => {
           callback({
             status: true,
             token: {
-              access_token: response.data.access_token,
-              refresh_token: response.data.refresh_token,
+              access_token: response.data[0].PublickTocken,
+              // refresh_token: response.data.refresh_token,
             },
           });
         }
@@ -66,6 +66,32 @@ export const logInAction = (payload, callback) => {
       .catch((error) => {
         callback({ status: false });
         dispatch(loginFailed(error.response));
+      });
+  };
+};
+
+export const ChangePassword = (data, callback) => {
+  return (dispatch) => {
+    axios
+      .post(`${SERVER_BASE_URL}change-password`, data)
+      .then((response) => {
+        callback(true);
+      })
+      .catch(function (error) {
+        callback(false);
+      });
+  };
+};
+
+export const Logout = (data, callback) => {
+  return (dispatch) => {
+    axios
+      .post(`${SERVER_BASE_URL}LogOut`, data)
+      .then((response) => {
+        callback(true);
+      })
+      .catch(function (error) {
+        callback(false);
       });
   };
 };

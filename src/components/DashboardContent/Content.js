@@ -15,7 +15,7 @@ const Content = (props) => {
             return (
               <div key={val.id} className="top-small-div">
                 <span
-                  class="glyphicon glyphicon-option-horizontal"
+                  className="glyphicon glyphicon-option-horizontal"
                   onClick={() => setDatepicker(!datepicker)}
                   style={{ cursor: "pointer" }}
                 ></span>

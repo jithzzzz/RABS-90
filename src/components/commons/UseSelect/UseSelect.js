@@ -33,7 +33,7 @@ const customStyles = {
 const UseFormSelect = (props) => {
   const dispatch = useDispatch();
   const onChangeHandler = (onChange, val) => {
-    console.log(onChange, val);
+    props.setErr && props.setErr(false);
     if (props.name === "medicin") {
       props.setMedicine({ ...props.medicine, medicin: val.id, name: val.name });
     } else if (props.name === "mnn") {

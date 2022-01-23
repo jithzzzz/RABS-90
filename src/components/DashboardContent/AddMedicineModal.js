@@ -6,10 +6,11 @@ import {
 } from "../../redux/actions/MedicineComponentAction";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import { useHistory } from "react-router-dom";
 
 const AddMedicineModal = (props) => {
   const dispatch = useDispatch();
-
+  const history = useHistory();
   const onSave = (data) => {
     if (!data.MAB) {
       data.MAB = "null";
@@ -20,17 +21,22 @@ const AddMedicineModal = (props) => {
     if (!data.MComapnyName) {
       data.MComapnyName = "null";
     }
-    dispatch(
-      getAddMedicine(data, (res) => {
-        if (res) {
-          dispatch(getMedicineDetails(() => {}));
-          props.closeModal(false);
-          toast("Added medicine successfully");
-        } else {
-          toast("Adding medicine failed");
-        }
-      })
-    );
+    if (localStorage.getItem("token")) {
+      dispatch(
+        getAddMedicine(data, (res) => {
+          if (res) {
+            dispatch(getMedicineDetails(() => {}));
+            props.closeModal(false);
+            toast("Added medicine successfully");
+          } else {
+            toast("Adding medicine failed");
+          }
+        })
+      );
+    } else {
+      localStorage.removeItem("token");
+      history.push("/login");
+    }
   };
   const {
     register,
@@ -43,7 +49,7 @@ const AddMedicineModal = (props) => {
     <div className="add-modal">
       <div className="d-block close">
         <i
-          class="fa fa-times-circle"
+          className="fa fa-times-circle"
           onClick={() => props.closeModal(false)}
         ></i>
       </div>

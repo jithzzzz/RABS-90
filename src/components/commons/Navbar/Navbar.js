@@ -11,6 +11,7 @@ import {
   getPatientHistorySearch,
 } from "../../../redux/actions/DashboardComponentActions";
 import { getPatientHistory } from "../../../redux/actions/AddPatientComponentAction";
+import { Logout } from "../../../redux/actions/LoginComponentActions";
 
 const Navbar = (props) => {
   const dropdownRef = useRef(null);
@@ -37,32 +38,42 @@ const Navbar = (props) => {
   });
   const searchHandler = (e) => {
     if (e.target.value) {
-      dispatch(
-        getPatientHistorySearch(
-          e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1),
-          (res) => {
-            setSearchOptn(true);
-            if (res.status) {
-              setSearchResult(res.data);
-            } else {
-              setSearchResult({ text: "No data found" });
+      if (localStorage.getItem("token")) {
+        dispatch(
+          getPatientHistorySearch(
+            e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1),
+            (res) => {
+              setSearchOptn(true);
+              if (res.status) {
+                setSearchResult(res.data);
+              } else {
+                setSearchResult({ text: "No data found" });
+              }
             }
-          }
-        )
-      );
+          )
+        );
+      } else {
+        localStorage.removeItem("token");
+        history.push("/login");
+      }
     } else {
       setSearchResult({});
     }
   };
   const onPatientHandler = (id) => {
     props.setPatient(true);
-    dispatch(
-      getPatientHistory(id, (res, data) => {
-        if (res) {
-          props.setPatientDetails(data);
-        }
-      })
-    );
+    if (localStorage.getItem("token")) {
+      dispatch(
+        getPatientHistory(id, (res, data) => {
+          if (res) {
+            props.setPatientDetails(data);
+          }
+        })
+      );
+    } else {
+      localStorage.removeItem("token");
+      history.push("/login");
+    }
   };
   return (
     <>
@@ -79,7 +90,8 @@ const Navbar = (props) => {
               className="mr-5"
               onClick={() => setPrescriptionModalOpen(true)}
             >
-              <i className="fa fa-plus mr-2" aria-hidden="true"></i>Prescription
+              <i className="fa fa-plus mr-2" aria-hidden="true"></i>
+              Prescription
             </button>
           ) : (
             <div className="nav-search d-flex border-hightlight-search-div mr-5 position-relative">
@@ -153,8 +165,19 @@ const Navbar = (props) => {
                 <div
                   className="dropDown-box pointer"
                   onClick={() => {
-                    localStorage.removeItem("access-token");
-                    history.push("/login");
+                    if (localStorage.getItem("token")) {
+                      dispatch(
+                        Logout({ UserName: user.UserName }, (res) => {
+                          if (res) {
+                            localStorage.removeItem("token");
+                            history.push("/login");
+                          }
+                        })
+                      );
+                    } else {
+                      localStorage.removeItem("token");
+                      history.push("/login");
+                    }
                   }}
                 >
                   Logout
@@ -168,6 +191,11 @@ const Navbar = (props) => {
         show={PrescriptionModalOpen}
         onRequestClose={closeModal}
         dialogClassName="prescription-modal"
+        // style={{
+        //   marginTop:
+        //     document?.querySelector(".prescription-modal")?.offsetHeight *
+        //     (27 / 100),
+        // }}
       >
         <PrescriptionModal {...props} closeModal={setPrescriptionModalOpen} />
       </Modal>

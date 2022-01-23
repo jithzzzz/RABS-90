@@ -13,7 +13,7 @@ const ReferenceContacts = () => {
   useEffect(() => {
     if (reference?.length) {
       let refe = reference?.map((val) => {
-        return { ...val, highlight: false, id: val.RFId  };
+        return { ...val, highlight: false, id: val.RFId };
       });
       setRef(refe);
     }
@@ -53,7 +53,7 @@ const ReferenceContacts = () => {
     <div className="reference-contacts">
       <div className="d-flex mb-2" style={{ justifyContent: "space-between" }}>
         <h4>Reference Contact</h4>
-        {/* <span class="glyphicon glyphicon-option-horizontal"></span> */}
+        {/* <span className="glyphicon glyphicon-option-horizontal"></span> */}
       </div>
       {data?.map((val, i) => {
         return (

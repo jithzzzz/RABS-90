@@ -74,7 +74,6 @@ axiosInstance.interceptors.response.use(
           return axiosInstance(originalRequest);
         })
         .catch((err) => {
-          console.log(err);
           localStorage.removeItem("access-token");
           localStorage.removeItem("refresh_token");
           window.location = "/login";

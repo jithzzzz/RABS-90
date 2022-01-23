@@ -5,12 +5,19 @@ import {
   getPatients,
   getReference,
 } from "../../redux/actions/DashboardComponentActions";
+import { useHistory } from "react-router-dom";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
   useEffect(() => {
-    dispatch(getPatients({}, () => {}));
-    dispatch(getReference({}, () => {}));
+    if (localStorage.getItem("token")) {
+      dispatch(getPatients({}, () => {}));
+      dispatch(getReference({}, () => {}));
+    } else {
+      localStorage.removeItem("token");
+      history.push("/login");
+    }
   }, []);
   return <DashboardContent />;
 };

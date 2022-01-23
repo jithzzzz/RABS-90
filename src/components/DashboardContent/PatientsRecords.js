@@ -8,6 +8,7 @@ import {
   getPatientSearch,
 } from "../../redux/actions/DashboardComponentActions";
 import ReactPaginate from "react-paginate";
+import { useHistory } from "react-router-dom";
 
 const PatientsRecords = (props) => {
   let i = 0;
@@ -15,6 +16,7 @@ const PatientsRecords = (props) => {
   const patientsRecord = useSelector(
     (state) => state.DashboardReducer.patientRecord
   );
+  const history = useHistory();
   const [offset, setOffset] = useState(1);
   const [data, setData] = useState([]);
   const [perPage] = useState(7);
@@ -39,20 +41,39 @@ const PatientsRecords = (props) => {
   };
   const onPatientHandler = (id, val) => {
     props.setPatientDetails(val);
-    dispatch(getPatientHistory(id,(res)=>{
-      if (res){props.setPatient(true);}
-    }));
+    if (localStorage.getItem("token")) {
+      dispatch(
+        getPatientHistory(id, (res) => {
+          if (res) {
+            props.setPatient(true);
+          }
+        })
+      );
+    } else {
+      localStorage.removeItem("token");
+      history.push("/login");
+    }
   };
   const searchHandler = (e) => {
     if (e.target.value) {
-      dispatch(
-        getPatientSearch(
-          e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1),
-          () => {}
-        )
-      );
+      if (localStorage.getItem("token")) {
+        dispatch(
+          getPatientSearch(
+            e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1),
+            () => {}
+          )
+        );
+      } else {
+        localStorage.removeItem("token");
+        history.push("/login");
+      }
     } else {
-      dispatch(getPatients({}, () => {}));
+      if (localStorage.getItem("token")) {
+        dispatch(getPatients({}, () => {}));
+      } else {
+        localStorage.removeItem("token");
+        history.push("/login");
+      }
     }
   };
   return (
@@ -71,7 +92,7 @@ const PatientsRecords = (props) => {
           </div>
         </div>
         <div>
-          {/* <span class="glyphicon glyphicon-option-vertical"></span> */}
+          {/* <span className="glyphicon glyphicon-option-vertical"></span> */}
         </div>
       </div>
       <table>

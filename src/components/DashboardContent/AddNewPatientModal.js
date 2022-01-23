@@ -8,6 +8,7 @@ import { getAddPatient } from "../../redux/actions/AddPatientComponentAction";
 import { getPatients } from "../../redux/actions/DashboardComponentActions";
 import { toast } from "react-toastify";
 import ReactSelect from "../commons/ReactSelect/ReactSelect";
+import { useHistory } from "react-router-dom";
 
 const AddNewPatient = (props) => {
   const [startDate, setStartDate] = useState(new Date());
@@ -20,6 +21,7 @@ const AddNewPatient = (props) => {
   const [bloodError, setBloodError] = useState(false);
   const [genderError, setGenderError] = useState(false);
   const bloodType = useSelector((state) => state.LoginReducer.bloodType);
+  const history = useHistory();
   const dispatch = useDispatch();
   const {
     register,
@@ -76,17 +78,22 @@ const AddNewPatient = (props) => {
         data.gender = "male";
       } else data.gender = "female";
       data.bloodType = blood;
-      dispatch(
-        getAddPatient(data, (res) => {
-          if (res) {
-            dispatch(getPatients({}, () => {}));
-            props.closeModal(false);
-            toast("Added patient successfully");
-          } else {
-            toast("Adding patient failed");
-          }
-        })
-      );
+      if (localStorage.getItem("token")) {
+        dispatch(
+          getAddPatient(data, (res) => {
+            if (res) {
+              dispatch(getPatients({}, () => {}));
+              props.closeModal(false);
+              toast("Added patient successfully");
+            } else {
+              toast("Adding patient failed");
+            }
+          })
+        );
+      } else {
+        localStorage.removeItem("token");
+        history.push("/login");
+      }
     }
   };
   const onSub = () => {

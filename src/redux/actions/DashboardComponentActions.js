@@ -69,12 +69,13 @@ export const getPatients = (payload, callback) => {
 export const getPatientSearch = (payload, callback) => {
   return (dispatch) => {
     axios
-      .post(`${SERVER_BASE_URL}PatientHistorySearch/${payload}`)
+      .post(`${SERVER_BASE_URL}PatientListSearch/${payload}`)
       .then((response) => {
         // callback(true);
-        if (response?.data?.OPID) {
-          dispatch(getPatientsSuccess([response.data]));
-        }
+
+        if (response?.data?.Data) {
+          dispatch(getPatientsSuccess(response.data.Data));
+        } else dispatch(getPatientsSuccess([]));
       })
       .catch(function (error) {
         //callback(false);
@@ -130,14 +131,12 @@ export const getReference = (payload, callback) => {
 export const getAddReference = (payload, callback) => {
   return (dispatch) => {
     axios
-      .post(`${SERVER_BASE_URL}referancedetails`,payload)
+      .post(`${SERVER_BASE_URL}referancedetails`, payload)
       .then((response) => {
         callback(true);
-        
       })
       .catch(function (error) {
         callback(false);
-        
       });
   };
 };

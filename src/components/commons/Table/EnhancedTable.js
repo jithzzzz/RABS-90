@@ -196,8 +196,8 @@ const EnhancedTable = ({
       />
       <MaUTable {...getTableProps()}>
         <TableHead>
-          {headerGroups.map((headerGroup) => (
-            <TableRow {...headerGroup.getHeaderGroupProps()}>
+          {headerGroups.map((headerGroup, i) => (
+            <TableRow key={i} {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column) => (
                 <TableCell
                   {...(column.id === "selection"
@@ -222,10 +222,10 @@ const EnhancedTable = ({
           {page?.map((row, i) => {
             prepareRow(row);
             return (
-              <TableRow {...row.getRowProps()}>
-                {row?.cells?.map((cell) => {
+              <TableRow key={i} {...row.getRowProps()}>
+                {row?.cells?.map((cell, i) => {
                   return (
-                    <TableCell {...cell.getCellProps()}>
+                    <TableCell key={i} {...cell.getCellProps()}>
                       {cell?.value !== "null" ? cell.value : null}
                     </TableCell>
                   );

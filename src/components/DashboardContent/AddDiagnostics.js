@@ -7,9 +7,11 @@ import {
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import ReactSelect from "../commons/ReactSelect/ReactSelect";
+import { useHistory } from "react-router-dom";
 
 const AddDiagnosticsModal = (props) => {
   const dispatch = useDispatch();
+  const history = useHistory();
   const [category, setCategory] = useState(null);
   const [categoryError, setCategoryError] = useState(false);
   const onSave = (data) => {
@@ -22,23 +24,27 @@ const AddDiagnosticsModal = (props) => {
     if (!data.Desicription) {
       data.Desicription = "null";
     }
-
-    dispatch(
-      getAddDiagonostics(data, (res) => {
-        if (res) {
-          dispatch(
-            getDiagonosticsDetails((res) => {
-              if (res) {
-              }
-            })
-          );
-          props.closeModal(false);
-          toast("Added diagonostics successfully");
-        } else {
-          toast("Adding diagonostics failed");
-        }
-      })
-    );
+    if (localStorage.getItem("token")) {
+      dispatch(
+        getAddDiagonostics(data, (res) => {
+          if (res) {
+            dispatch(
+              getDiagonosticsDetails((res) => {
+                if (res) {
+                }
+              })
+            );
+            props.closeModal(false);
+            toast("Added diagonostics successfully");
+          } else {
+            toast("Adding diagonostics failed");
+          }
+        })
+      );
+    } else {
+      localStorage.removeItem("token");
+      history.push("/login");
+    }
   };
   const {
     register,
@@ -72,7 +78,7 @@ const AddDiagnosticsModal = (props) => {
     <div className="add-modal">
       <div className="d-block close">
         <i
-          class="fa fa-times-circle"
+          className="fa fa-times-circle"
           onClick={() => props.closeModal(false)}
         ></i>
       </div>

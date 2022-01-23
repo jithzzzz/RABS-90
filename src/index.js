@@ -9,6 +9,7 @@ import { PersistGate } from "redux-persist/integration/react";
 import "react-calendar/dist/Calendar.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import "react-datepicker/dist/react-datepicker.css";
 
 let storeConfig = configureStore();
 

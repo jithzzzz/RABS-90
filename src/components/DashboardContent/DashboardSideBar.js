@@ -5,12 +5,13 @@ import AddMedicineModal from "./AddMedicineModal";
 import MedicineDetailsModal from "./MedicineDetailsModal";
 import DiagnosticsDetails from "./DiagnosticsDetails";
 import { useHistory } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import AddNewPatient from "./AddNewPatientModal";
 import { getMedicineDetails } from "../../redux/actions/MedicineComponentAction";
 import { getDiagonosticsDetails } from "../../redux/actions/DiagonosticsComponentAction";
 import AddReferenceModal from "./AddReference";
 import { Modal } from "react-bootstrap";
+import { Logout } from "../../redux/actions/LoginComponentActions";
 
 const DashboardSideBar = (props) => {
   const [medicineDropdown, setMedicineDropdown] = useState(false);
@@ -24,6 +25,7 @@ const DashboardSideBar = (props) => {
   const [addReferenceModal, setaddReferenceModal] = useState(false);
   const dispatch = useDispatch();
   const history = useHistory();
+  const user = useSelector((state) => state.LoginReducer.user);
 
   const blueButtonConfig = [
     {
@@ -106,6 +108,10 @@ const DashboardSideBar = (props) => {
       } else setState(true);
     }
   };
+  const LogoutHandler = () => {
+    localStorage.removeItem("token");
+    history.push("/login");
+  };
   return (
     <>
       <div className="dashboard-sidebar d-flex pt-2 position-relative">
@@ -138,7 +144,11 @@ const DashboardSideBar = (props) => {
                     className="col-8 red-button sidebar-button"
                     onClick={() => {
                       el.setState(true);
-                      el.api && dispatch(el.api());
+                      if (el.api) {
+                        localStorage.getItem("token")
+                          ? dispatch(el.api())
+                          : LogoutHandler();
+                      }
                     }}
                     style={{ textAlign: props.sidebar ? "left" : "center" }}
                   >
@@ -154,8 +164,14 @@ const DashboardSideBar = (props) => {
           className="white-button logout sidebar-button"
           style={{ textAlign: "left" }}
           onClick={() => {
-            localStorage.removeItem("access-token");
-            history.push("/login");
+            dispatch(
+              Logout({ UserName: user.UserName }, (res) => {
+                if (res) {
+                  localStorage.removeItem("token");
+                  history.push("/login");
+                }
+              })
+            );
           }}
         >
           <i className="fa fa-sign-out"></i>

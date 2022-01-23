@@ -6,10 +6,11 @@ import {
 } from "../../redux/actions/DashboardComponentActions";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import { useHistory } from "react-router-dom";
 
 const AddReferenceModal = (props) => {
   const dispatch = useDispatch();
-
+  const history = useHistory();
   const onSave = (data) => {
     if (!data.Department) {
       data.Department = "null";
@@ -17,18 +18,22 @@ const AddReferenceModal = (props) => {
     if (!data.Pho) {
       data.Pho = "null";
     }
-
-    dispatch(
-      getAddReference(data, (res) => {
-        if (res) {
-          dispatch(getReference({}, () => {}));
-          props.closeModal(false);
-          toast("Added reference successfully");
-        } else {
-          toast("Adding reference failed");
-        }
-      })
-    );
+    if (localStorage.getItem("token")) {
+      dispatch(
+        getAddReference(data, (res) => {
+          if (res) {
+            dispatch(getReference({}, () => {}));
+            props.closeModal(false);
+            toast("Added reference successfully");
+          } else {
+            toast("Adding reference failed");
+          }
+        })
+      );
+    } else {
+      localStorage.removeItem("token");
+      history.push("/login");
+    }
   };
   const {
     register,

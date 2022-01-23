@@ -8,66 +8,89 @@ import {
   getPatients,
   getPatientHistorySearch,
 } from "../../redux/actions/DashboardComponentActions";
+import { Modal } from "react-bootstrap";
 import useOnClickOutside from "../commons/OuterClick/OuterClick";
+import LabTestHistory from "./LabTestHistory";
+import { useHistory } from "react-router-dom";
 
 const PatientDetails = (props) => {
   const dispatch = useDispatch();
   const patientHistory = useSelector(
     (state) => state.PatientReducer.patientHistory
   );
+  const history = useHistory();
   const searchRef = useRef(null);
   const [searchResult, setSearchResult] = useState({});
   const [searchOptn, setSearchOptn] = useState(false);
+  const [labtestHistory, setlabtestHistory] = useState([]);
+  const [labhistoryModal, setLabhistoryModal] = useState(false);
   const onViewHandler = (id) => {
     //dispatch(getPatientHistory(id));
   };
   const [prep, setPrep] = useState([]);
   useEffect(() => {
-    if (patientHistory?.basicData?.length >= 2) {
-      let prepscr = patientHistory?.basicData?.filter((val, i) => {
+    if (patientHistory?.length >= 2) {
+      let prepscr = patientHistory?.filter((val, i) => {
         return i !== 0;
       });
       setPrep(prepscr);
     } else {
       setPrep([]);
     }
+    if (patientHistory?.length !== 0) {
+      let his = [];
+      patientHistory.forEach((val) => {
+        his.push(...val.labTestdata);
+      });
+      setlabtestHistory(his);
+    }
   }, [patientHistory]);
   const searchHandler = (e) => {
     if (e.target.value) {
-      dispatch(
-        getPatientHistorySearch(
-          e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1),
-          (res) => {
-            setSearchOptn(true);
-            if (res.status) {
-              setSearchResult(res.data);
-            } else {
-              setSearchResult({ text: "No data found" });
+      if (localStorage.getItem("token")) {
+        dispatch(
+          getPatientHistorySearch(
+            e.target.value.charAt(0).toUpperCase() + e.target.value.slice(1),
+            (res) => {
+              setSearchOptn(true);
+              if (res.status) {
+                setSearchResult(res.data);
+              } else {
+                setSearchResult({ text: "No data found" });
+              }
             }
-          }
-        )
-      );
+          )
+        );
+      } else {
+        localStorage.removeItem("token");
+        history.push("/login");
+      }
     } else {
       setSearchResult({});
     }
   };
   const onPatientHandler = (id) => {
-    dispatch(
-      getPatientHistory(id, (res, data) => {
-        if (res) {
-          setSearchOptn(false);
-          console.log(data);
-          props.setPatientDetails(data);
-        }
-      })
-    );
+    if (localStorage.getItem("token")) {
+      dispatch(
+        getPatientHistory(id, (res, data) => {
+          if (res) {
+            setSearchOptn(false);
+
+            props.setPatientDetails(data);
+          }
+        })
+      );
+    } else {
+      localStorage.removeItem("token");
+      history.push("/login");
+    }
   };
   useOnClickOutside(searchRef, () => {
     setSearchOptn(false);
   });
   return (
     <>
-      {patientHistory?.patientInfo[0]?.firstName ? (
+      {patientHistory[0]?.patientInfo[0]?.firstName ? (
         <div className="patient-details">
           <div className="search border-hightlight-search-div position-relative">
             <i className="fa fa-search"></i>
@@ -106,6 +129,7 @@ const PatientDetails = (props) => {
               </div>
             ) : null}
           </div>
+
           <div className="center-div row d-flex">
             <div className="col-5 left">
               <div className="d-flex">
@@ -121,24 +145,24 @@ const PatientDetails = (props) => {
             </div> */}
                 <div className="ml-3">
                   <h4>
-                    {patientHistory?.patientInfo[0]?.firstName}{" "}
-                    {patientHistory?.patientInfo[0]?.lastName}
+                    {patientHistory[0]?.patientInfo[0]?.firstName}{" "}
+                    {patientHistory[0]?.patientInfo[0]?.lastName}
                   </h4>
                   <h6>
                     {moment().diff(
-                      patientHistory?.patientInfo[0]?.dob,
+                      patientHistory[0]?.patientInfo[0]?.dob,
                       "years",
                       false
                     ) !== 0
                       ? moment().diff(
-                          patientHistory?.patientInfo[0]?.dob,
+                          patientHistory[0]?.patientInfo[0]?.dob,
                           "years",
                           false
                         ) +
                         " " +
                         "years old"
                       : moment().diff(
-                          patientHistory?.patientInfo[0]?.dob,
+                          patientHistory[0]?.patientInfo[0]?.dob,
                           "months",
                           false
                         ) +
@@ -153,15 +177,15 @@ const PatientDetails = (props) => {
               >
                 <div className="">
                   <h6>Height</h6>
-                  <h6>{patientHistory?.patientInfo[0]?.heigth}</h6>
+                  <h6>{patientHistory[0]?.patientInfo[0]?.heigth}</h6>
                 </div>
                 <div className="">
                   <h6>Weight</h6>
-                  <h6>{patientHistory?.patientInfo[0]?.weigth}</h6>
+                  <h6>{patientHistory[0]?.patientInfo[0]?.weigth}</h6>
                 </div>
                 <div className="">
                   <h6>Blood Type</h6>
-                  <h6>{patientHistory?.extr_field}</h6>
+                  <h6>{patientHistory[0]?.extr_field}</h6>
                 </div>
               </div>
             </div>
@@ -169,25 +193,24 @@ const PatientDetails = (props) => {
               <div className="col-6">
                 <div className="">
                   <h6>Phone Number</h6>
-                  <h6>{patientHistory?.patientInfo[0]?.phoneNumber}</h6>
+                  <h6>{patientHistory[0]?.patientInfo[0]?.phoneNumber}</h6>
                 </div>
                 <div className="mt-5">
                   <h6>OP ID</h6>
-                  <h6>{patientHistory?.OPID}</h6>
+                  <h6>{patientHistory[0]?.OPID}</h6>
                 </div>
               </div>
               <div className="col-6">
                 <div className="">
                   <h6>Email Address</h6>
-                  <h6>{patientHistory?.patientInfo[0]?.emailAddress}</h6>
+                  <h6>{patientHistory[0]?.patientInfo[0]?.emailAddress}</h6>
                 </div>
                 <div className="mt-5">
                   <h6>Medical Condition</h6>
                   <h6>
                     {
-                      patientHistory?.basicData[
-                        patientHistory?.basicData?.length - 1
-                      ]?.medical_condition
+                      patientHistory[patientHistory?.length - 1]?.basicData
+                        ?.medical_condition
                     }
                   </h6>
                 </div>
@@ -196,22 +219,34 @@ const PatientDetails = (props) => {
           </div>
           <div className="lower-div row">
             <div className="col-6 left">
-              {patientHistory?.basicData?.length !== 0 ? (
+              {patientHistory?.length !== 0 ? (
                 <div className="row" style={{ height: "100%" }}>
                   <div className="col-10">
-                    <h6>
-                      {moment(patientHistory?.basicData[0]?.Update).format(
-                        "DD/MM/YYYY"
-                      )}
-                    </h6>
+                    {patientHistory[patientHistory?.length - 1]?.basicData
+                      ?.Update && (
+                      <h6>
+                        {moment(
+                          patientHistory[patientHistory?.length - 1]?.basicData
+                            ?.Update
+                        ).format("DD/MM/YYYY")}
+                      </h6>
+                    )}
                     <h6>{`${
-                      patientHistory?.basicData[0]?.medical_condition !==
-                        null &&
-                      `Medical Condition: ${patientHistory?.basicData[0]?.medical_condition}`
+                      patientHistory[patientHistory?.length - 1]?.basicData
+                        ?.medical_condition !== null &&
+                      `Medical Condition: ${
+                        patientHistory[patientHistory?.length - 1]?.basicData
+                          ?.medical_condition
+                          ? patientHistory[patientHistory?.length - 1]
+                              ?.basicData?.medical_condition
+                          : ""
+                      }`
                     }`}</h6>
                     <p>
-                      {patientHistory?.basicData[0]?.refnote !== "null"
-                        ? patientHistory?.basicData[0]?.refnote
+                      {patientHistory[patientHistory?.length - 1]?.basicData
+                        ?.refnote !== "null"
+                        ? patientHistory[patientHistory?.length - 1]?.basicData
+                            ?.refnote
                         : ""}
                     </p>
                   </div>
@@ -223,26 +258,36 @@ const PatientDetails = (props) => {
                       onViewHandler(patientHistory?.patientInfo[0]?.patient_id)
                     }
                   >
-                    <i class="fas fa-expand"></i>
+                    <i className="fas fa-expand"></i>
                   </button>
                   <button className="d-block">
-                    <i class="fa fa-trash" aria-hidden="true"></i>
+                    <i className="fa fa-trash" aria-hidden="true"></i>
                   </button> */}
                   </div>
                 </div>
               ) : null}
             </div>
             <div className="col-6">
-              <Calendar
-                value={
-                  new Date(
-                    patientHistory?.basicData?.length !== 0 &&
-                      patientHistory?.basicData[
-                        patientHistory?.basicData?.length - 1
-                      ]?.Update
-                  )
-                }
-              />
+              <div className="d-flex">
+                <button
+                  className="lab-test-history mr-3"
+                  onClick={() => setLabhistoryModal(true)}
+                >
+                  Lab Test History
+                </button>
+                <Calendar
+                  value={
+                    new Date(
+                      patientHistory?.length !== 0 &&
+                      patientHistory[patientHistory?.length - 1]?.basicData
+                        ?.Update
+                        ? patientHistory[patientHistory?.length - 1]?.basicData
+                            ?.Update
+                        : new Date()
+                    )
+                  }
+                />
+              </div>
             </div>
           </div>
           <div className="lower-div down row">
@@ -251,12 +296,18 @@ const PatientDetails = (props) => {
                 <div key={i} className="col-6 left" style={{ height: "250px" }}>
                   <div className="row" style={{ height: "100%" }}>
                     <div className="col-10">
-                      <h6>{moment(val?.Update).format("DD/MM/YYYY")}</h6>
+                      <h6>
+                        {moment(val?.basicData?.Update).format("DD/MM/YYYY")}
+                      </h6>
                       <h6>{`${
-                        val?.medical_condition !== null &&
-                        `Medical Condition: ${val?.medical_condition}`
+                        val?.basicData?.medical_condition !== null &&
+                        `Medical Condition: ${val?.basicData?.medical_condition}`
                       }`}</h6>
-                      <p>{val?.refnote === "null" ? "" : val?.refnote}</p>
+                      <p>
+                        {val?.basicData?.refnote === "null"
+                          ? ""
+                          : val?.basicData?.refnote}
+                      </p>
                     </div>
                     <div className="col-2 edit-section">
                       {/* <button
@@ -266,10 +317,10 @@ const PatientDetails = (props) => {
                             onViewHandler(patientHistory?.patientInfo[0]?.patient_id)
                           }
                         >
-                          <i class="fas fa-expand"></i>
+                          <i className="fas fa-expand"></i>
                         </button>
                         <button className="d-block">
-                          <i class="fa fa-trash" aria-hidden="true"></i>
+                          <i className="fa fa-trash" aria-hidden="true"></i>
                         </button> */}
                     </div>
                   </div>
@@ -279,6 +330,24 @@ const PatientDetails = (props) => {
           </div>
         </div>
       ) : null}
+      <Modal
+        show={labhistoryModal}
+        onRequestClose={() => setLabhistoryModal(false)}
+        dialogClassName="lab-result prescription-modal"
+        // style={{
+        //   marginTop:
+        //     document?.querySelector(".lab-result.prescription-modal")
+        //       ?.offsetHeight *
+        //     (10 / 100),
+        // }}
+      >
+        {/* content={ */}
+        <LabTestHistory
+          labTestHistory={labtestHistory}
+          closeModal={setLabhistoryModal}
+        />
+        {/* } */}
+      </Modal>
     </>
   );
 };

@@ -52,7 +52,7 @@ const MultiSelect = (props) => {
             style={{ border: "none", background: "none", alignItems: "center" }}
           >
             <i
-              class="fa fa-angle-down"
+              className="fa fa-angle-down"
               style={{ color: "#72c4a7", fontSize: "22px" }}
               aria-hidden="true"
             ></i>
@@ -80,7 +80,7 @@ const MultiSelect = (props) => {
                 <option key={data.name + i}>{data.value}</option>
                 {selectedOptions?.includes(data.value) ? (
                   <i
-                    class="fa fa-check"
+                    className="fa fa-check"
                     aria-hidden="true"
                     style={{ padding: "0px 20px" }}
                   ></i>

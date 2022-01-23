@@ -1,27 +1,31 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { ChangePassword } from "../../redux/actions/LoginComponentActions";
+import { useHistory } from "react-router-dom";
 
-const ChangePassword = (props) => {
+const ChangePasswordModal = (props) => {
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.LoginReducer.user);
+  const history = useHistory();
   const onChange = (data) => {
-    // dispatch(
-    //   getAddDiagonostics(data, (res) => {
-    //     if (res) {
-    //       dispatch(
-    //         getDiagonosticsDetails((res) => {
-    //           if (res) {
-    //           }
-    //         })
-    //       );
-    //       props.closeModal(false);
-    //       toast("Added diagonostics successfully");
-    //     } else {
-    //       toast("Adding diagonostics failed");
-    //     }
-    //   })
-    // );
+    data.email = user.Email;
+    if (localStorage.getItem("token")) {
+    } else {
+      localStorage.removeItem("token");
+      history.push("/login");
+    }
+    dispatch(
+      ChangePassword(data, (res) => {
+        if (res) {
+          props.closeModal(false);
+          toast("Password changed successfully");
+        } else {
+          toast("Changing password failed");
+        }
+      })
+    );
   };
   const {
     register,
@@ -43,15 +47,15 @@ const ChangePassword = (props) => {
         <input
           className=" mt-3 d-block"
           type="text"
-          {...register("old", {
+          {...register("expassword", {
             required: true,
-            minLength: 5,
-            maxLength: 64,
+            // minLength: 5,
+            // maxLength: 64,
           })}
           onChange={() => clearErrors("old")}
         />
         <div className="d-flex" style={{ height: "16px" }}>
-          {errors.old && (
+          {errors.expassword && (
             <span className="valid-alert-span">*Enter old password</span>
           )}
         </div>
@@ -59,7 +63,7 @@ const ChangePassword = (props) => {
         <input
           className=" mt-3 d-block"
           type="text"
-          {...register("new", {
+          {...register("Newpassword", {
             required: true,
             minLength: 4,
             maxLength: 64,
@@ -67,8 +71,10 @@ const ChangePassword = (props) => {
           onChange={() => clearErrors("new")}
         />
         <div className="d-flex" style={{ height: "16px" }}>
-          {errors.new && (
-            <span className="valid-alert-span">*Enter new password</span>
+          {errors.Newpassword && (
+            <span className="valid-alert-span">
+              *Enter a valid new password
+            </span>
           )}
         </div>
         <div className="d-flex">
@@ -92,4 +98,4 @@ const ChangePassword = (props) => {
   );
 };
 
-export default ChangePassword;
+export default ChangePasswordModal;
