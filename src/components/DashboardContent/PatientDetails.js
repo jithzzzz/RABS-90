@@ -271,6 +271,7 @@ const PatientDetails = (props) => {
               <div className="d-flex">
                 <button
                   className="lab-test-history mr-3"
+                  disabled={labtestHistory?.length ? false : true}
                   onClick={() => setLabhistoryModal(true)}
                 >
                   Lab Test History

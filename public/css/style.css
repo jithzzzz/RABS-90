@@ -5,6 +5,18 @@
   height: auto;
 }
 
+.lab-test-history {
+  height: 50px;
+  background: #72c4a7;
+  border-radius: 10px;
+  color: #fff;
+  font-weight: 600;
+}
+
+.prescription-modal .react-datepicker-wrapper {
+  flex: 4;
+}
+
 .dashboard-sidebar-logo {
   width: 88px;
   height: 57px;
@@ -190,13 +202,7 @@ button:focus {
   padding: 14px 10px;
   width: 90%;
 }
-.lab-test-history {
-  height: 50px;
-  background: #72c4a7;
-  border-radius: 10px;
-  color: #fff;
-  font-weight: 600;
-}
+
 .patient-details .center-div {
   margin: 40px 0px 0px 0px;
   overflow: hidden;
@@ -488,9 +494,6 @@ button:focus {
   border-radius: 5px;
   border: 1px solid #72c4a7;
   padding-left: 5px;
-}
-.prescription-modal .react-datepicker-wrapper {
-  flex: 4;
 }
 
 .modal.show .modal-dialog {

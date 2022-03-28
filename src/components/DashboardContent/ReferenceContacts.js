@@ -24,7 +24,7 @@ const ReferenceContacts = () => {
   };
   useEffect(() => {
     if (Array.isArray(refrenceContact)) {
-      if (refrenceContact?.length >= 7) {
+      if (refrenceContact?.length > 7) {
         getData();
       } else setData(refrenceContact);
     }
@@ -87,7 +87,7 @@ const ReferenceContacts = () => {
           </div>
         );
       })}
-      {refrenceContact?.length >= 7 ? (
+      {refrenceContact?.length > 7 ? (
         <div className="d-block text-center">
           <ReactPaginate
             previousLabel={"<"}

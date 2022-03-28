@@ -262,6 +262,7 @@ const PrescriptionModal = (props) => {
         dispatch(
           addPrescription(payload, (res, id) => {
             if (res) {
+              props.closeModal(false);
               dispatch(
                 getPatientHistory(patientInfo[0]?.patientInfo[0]?.patient_id)
               );

@@ -28,7 +28,7 @@ const PatientsRecords = (props) => {
   };
   useEffect(() => {
     if (Array.isArray(patientsRecord)) {
-      if (patientsRecord?.length >= 7) {
+      if (patientsRecord?.length > 7) {
         getData();
       } else setData(patientsRecord);
     }
@@ -142,7 +142,7 @@ const PatientsRecords = (props) => {
           })}
         </tbody>
       </table>
-      {patientsRecord?.length >= 7 ? (
+      {patientsRecord?.length > 7 ? (
         <div className="d-block text-center">
           <ReactPaginate
             previousLabel={"<"}
